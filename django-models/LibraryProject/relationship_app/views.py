@@ -1,20 +1,13 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from django.views import View
 from .models import Book, Library
-
 
 # ----------------------------------------------------
 # FUNCTION-BASED VIEW (plain text output)
 # ----------------------------------------------------
 def list_books(request):
     books = Book.objects.all()
-
-    output = ""
-    for book in books:
-        output += f"{book.title} by {book.author.name}\n"
-
-    return HttpResponse(output, content_type="text/plain")
-
+    return render(request, "relationship_app/list_books.html", {"books": books})
 
 # ----------------------------------------------------
 # CLASS-BASED VIEW (plain text output)
@@ -22,10 +15,4 @@ def list_books(request):
 class LibraryDetailView(View):
     def get(self, request, pk):
         library = Library.objects.get(pk=pk)
-        books = library.books.all()
-
-        output = f"Library: {library.name}\nBooks:\n"
-        for book in books:
-            output += f"- {book.title} by {book.author.name}\n"
-
-        return HttpResponse(output, content_type="text/plain")
+        return render(request, "relationship_app/library_detail.html", {"library": library})
