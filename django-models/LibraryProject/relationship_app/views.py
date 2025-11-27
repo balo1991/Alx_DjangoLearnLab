@@ -1,18 +1,31 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView
+from django.http import HttpResponse
+from django.views import View
 from .models import Book, Library
 
-# ----------------------------------------------------
-# FUNCTION-BASED VIEW
-# ----------------------------------------------------
-def list_books(request):
-    books = Book.objects.select_related("author").all()
-    return render(request, "list_books.html", {"books": books})
 
 # ----------------------------------------------------
-# CLASS-BASED VIEW
+# FUNCTION-BASED VIEW (plain text output)
 # ----------------------------------------------------
-class LibraryDetailView(DetailView):
-    model = Library
-    template_name = "library_detail.html"
-    context_object_name = "library"
+def list_books(request):
+    books = Book.objects.all()
+
+    output = ""
+    for book in books:
+        output += f"{book.title} by {book.author.name}\n"
+
+    return HttpResponse(output, content_type="text/plain")
+
+
+# ----------------------------------------------------
+# CLASS-BASED VIEW (plain text output)
+# ----------------------------------------------------
+class LibraryDetailView(View):
+    def get(self, request, pk):
+        library = Library.objects.get(pk=pk)
+        books = library.books.all()
+
+        output = f"Library: {library.name}\nBooks:\n"
+        for book in books:
+            output += f"- {book.title} by {book.author.name}\n"
+
+        return HttpResponse(output, content_type="text/plain")
