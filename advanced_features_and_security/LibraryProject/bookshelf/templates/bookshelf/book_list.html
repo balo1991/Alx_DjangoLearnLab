@@ -1,0 +1,18 @@
+<!-- bookshelf/templates/bookshelf/book_list.html -->
+
+<h2>Books</h2>
+
+<form method="get">
+    <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
+<ul>
+    {% for book in books %}
+        <li>
+            <strong>{{ book.title }}</strong> - {{ book.author }}
+        </li>
+    {% empty %}
+        <li>No books found.</li>
+    {% endfor %}
+</ul>
