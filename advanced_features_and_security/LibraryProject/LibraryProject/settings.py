@@ -130,5 +130,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
+# --- Security settings required by your validator ---
+
+# Prevent MIME-type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Activate built-in XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent your site from being iframed (Clickjacking protection)
+X_FRAME_OPTIONS = 'DENY'
+
+# Cookies must be sent only over HTTPS
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
